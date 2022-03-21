@@ -500,8 +500,8 @@ CONFIG_FEED_routing=y
 CONFIG_FEED_telephony=y
 CONFIG_FEED_helloworld=y
 # CONFIG_FEED_kenzo is not set
-# CONFIG_FEED_small8 is not set
-CONFIG_FEED_passwall=y
+CONFIG_FEED_small8=y
+# CONFIG_FEED_passwall is not set
 
 #
 # Base system
