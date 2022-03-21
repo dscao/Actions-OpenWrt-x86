@@ -72,7 +72,7 @@ jobs:
       with:
        ccache: 'true' #'true' 默认值
        #清空缓存
-       clean:  'true'  # 'false' 默认值
+       clean:  'false'  # 'false' 默认值
        prefix: ${{ github.workspace }}/openwrt
     
     - name: luci-app-openclash install
@@ -87,17 +87,7 @@ jobs:
         git pull origin master
         git branch --set-upstream-to=origin/master master
     
-    - name: Install Passwall source
-      run: |
-        cd openwrt
-        mkdir package/openwrt-passwall
-        cd package/openwrt-passwall
-        git init
-        git remote add -f origin https://github.com/xiaorouji/openwrt-passwall/
-        git config core.sparsecheckout true
-        echo "openwrt-passwall" >> .git/info/sparse-checkout
-        git pull origin master
-        git branch --set-upstream-to=origin/master master
+  
     - name: Install Passwall—luci source
       run: |
         cd openwrt
