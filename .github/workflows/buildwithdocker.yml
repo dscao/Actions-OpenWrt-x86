@@ -92,7 +92,7 @@ jobs:
        cd openwrt
        git clone https://github.com/kenzok8/jell.git package/jell
        cd package/jell/
-       mv -f !(luci-app-openclash|base-files) package/
+       mv `ls|grep -v "luci-app-openclash\|base-files"` package/
     
     - name: Load custom feeds
       run: |
