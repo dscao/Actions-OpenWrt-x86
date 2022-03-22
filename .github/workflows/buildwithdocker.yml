@@ -75,31 +75,31 @@ jobs:
        clean:  'true'  # 'false' 默认值
        prefix: ${{ github.workspace }}/openwrt
     
-    - name: luci-app-openclash install
-      run: |
-        cd openwrt
-        make clean
-        mkdir package/luci-app-openclash
-        cd package/luci-app-openclash
-        git init
-        git remote add -f origin https://github.com/vernesong/OpenClash.git
-        git config core.sparsecheckout true
-        echo "luci-app-openclash" >> .git/info/sparse-checkout
-        git pull origin master
-        git branch --set-upstream-to=origin/master master
+    #- name: luci-app-openclash install
+    #  run: |
+    #    cd openwrt
+    #    make clean
+    #    mkdir package/luci-app-openclash
+    #    cd package/luci-app-openclash
+    #    git init
+    #    git remote add -f origin https://github.com/vernesong/OpenClash.git
+    #    git config core.sparsecheckout true
+    #    echo "luci-app-openclash" >> .git/info/sparse-checkout
+    #    git pull origin master
+    #    git branch --set-upstream-to=origin/master master
     
   
-    - name: Install Passwall—luci source
-      run: |
-        cd openwrt
-        mkdir package/openwrt-passwall-luci
-        cd package/openwrt-passwall-luci
-        git init
-        git remote add -f origin https://github.com/xiaorouji/openwrt-passwall/
-        git config core.sparsecheckout true
-        echo "openwrt-passwall-luci" >> .git/info/sparse-checkout
-        git pull origin luci
-        git branch --set-upstream-to=origin/luci master    
+    #- name: Install Passwall—luci source
+    #  run: |
+    #    cd openwrt
+    #    mkdir package/openwrt-passwall-luci
+    #    cd package/openwrt-passwall-luci
+    #    git init
+    #    git remote add -f origin https://github.com/xiaorouji/openwrt-passwall/
+    #    git config core.sparsecheckout true
+    #    echo "openwrt-passwall-luci" >> .git/info/sparse-checkout
+    #    git pull origin luci
+    #    git branch --set-upstream-to=origin/luci master    
 
     
     - name: Load custom feeds
