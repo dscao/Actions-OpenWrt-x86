@@ -66,6 +66,7 @@ jobs:
         df -hT $PWD
         git clone $REPO_URL -b $REPO_BRANCH openwrt
         ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
+        make clean
    
     - name: Cache
       uses: klever1988/cachewrtbuild@main
@@ -78,7 +79,7 @@ jobs:
     #- name: luci-app-openclash install
     #  run: |
     #    cd openwrt
-    #    make clean
+    #    
     #    mkdir package/luci-app-openclash
     #    cd package/luci-app-openclash
     #    git init
