@@ -100,12 +100,7 @@ jobs:
       run: |
         cd openwrt/package 
         git clone https://github.com/messense/aliyundrive-webdav.git
-       
         
-    - name: smallpackage
-      run: |
-        cd openwrt/package 
-        git clone https://github.com/dscao/lean-packages.git
     
     - name: Load custom feeds
       run: |
