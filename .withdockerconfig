@@ -499,9 +499,7 @@ CONFIG_FEED_luci=y
 CONFIG_FEED_routing=y
 CONFIG_FEED_telephony=y
 CONFIG_FEED_helloworld=y
-CONFIG_FEED_kenzo=y
-CONFIG_FEED_small=y
-
+CONFIG_FEED_passwall=y
 #
 # Base system
 #
