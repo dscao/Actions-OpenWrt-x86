@@ -101,10 +101,6 @@ jobs:
         cd openwrt/package 
         git clone https://github.com/messense/aliyundrive-webdav.git
        
-    - name: luci-app-frpc
-      run: |
-        cd openwrt/package 
-        git clone https://github.com/kuoruan/luci-app-frpc.git
         
     - name: smallpackage
       run: |
