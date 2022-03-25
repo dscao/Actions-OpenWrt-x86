@@ -78,6 +78,7 @@ jobs:
     - name: luci-app-openclash install
       run: |
         cd openwrt
+        make clean
         mkdir package/luci-app-openclash
         cd package/luci-app-openclash
         git init
