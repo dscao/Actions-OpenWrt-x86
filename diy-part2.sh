@@ -18,9 +18,10 @@ sed -i 's/192.168.1.1/192.168.1.2/g' package/base-files/files/bin/config_generat
 # welcome test
 
 svn co https://github.com/sirpdboy/sirpdboy-package/trunk/luci-app-netdata package/luci-app-netdata
+
 # 流量监控
-svn co https://github.com/haiibo/packages/trunk/luci-app-wrtbwmon package/luci-app-wrtbwmon
-svn co https://github.com/haiibo/packages/trunk/wrtbwmon package/wrtbwmon
+# svn co https://github.com/haiibo/packages/trunk/luci-app-wrtbwmon package/luci-app-wrtbwmon
+# svn co https://github.com/haiibo/packages/trunk/wrtbwmon package/wrtbwmon
 
 # 在线用户
 git clone --depth=1 https://github.com/haiibo/luci-app-onliner package/luci-app-onliner
