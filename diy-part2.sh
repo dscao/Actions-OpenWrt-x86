@@ -19,6 +19,9 @@ sed -i 's/192.168.1.1/192.168.1.2/g' package/base-files/files/bin/config_generat
 
 svn co https://github.com/sirpdboy/sirpdboy-package/trunk/luci-app-netdata package/luci-app-netdata
 
+
+git clone -b master https://github.com/pymumu/luci-app-smartdns.git package/luci-app-smartdns
+
 # 流量监控
 # svn co https://github.com/haiibo/packages/trunk/luci-app-wrtbwmon package/luci-app-wrtbwmon
 # svn co https://github.com/haiibo/packages/trunk/wrtbwmon package/wrtbwmon
