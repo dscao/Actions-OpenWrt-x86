@@ -22,6 +22,8 @@ svn co https://github.com/sirpdboy/sirpdboy-package/trunk/luci-app-netdata packa
 
 git clone -b lede https://github.com/pymumu/luci-app-smartdns.git package/luci-app-smartdns
 
+git clone -b master https://github.com/rufengsuixing/luci-app-adguardhome.git package/luci-app-adguardhome
+
 # 流量监控
 # svn co https://github.com/haiibo/packages/trunk/luci-app-wrtbwmon package/luci-app-wrtbwmon
 # svn co https://github.com/haiibo/packages/trunk/wrtbwmon package/wrtbwmon
