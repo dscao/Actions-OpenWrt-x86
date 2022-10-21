@@ -115,10 +115,10 @@ jobs:
         $GITHUB_WORKSPACE/$DIY_P1_SH
         
    
-    - name: lenyu
+    - name: dscao
       run: |
         cd openwrt 
-        bash  lenyu.sh
+        bash  dscao.sh
 
 
     - name: Update feeds
