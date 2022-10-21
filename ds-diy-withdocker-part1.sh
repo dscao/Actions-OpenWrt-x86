@@ -65,7 +65,7 @@ fi
 ls bin/targets/x86/64 | grep "_dscaodocker.img" | cut -d - -f 3 | cut -d _ -f 1-2 > wget/op_version1
 #md5
 ls -l  "bin/targets/x86/64" | awk -F " " '{print $9}' > wget/open_dev_md5
-dev_version=`grep "_uefi-gpt_devdscaodocker.img.gz" wget/open_dev_md5 | cut -d - -f 3 | cut -d _ -f 1-2`
+dev_version=`grep "_uefi-gpt_dev_dscaodocker.img.gz" wget/open_dev_md5 | cut -d - -f 3 | cut -d _ -f 1-2`
 openwrt_dev=openwrt_x86-64-${dev_version}_dev_dscaodocker.img.gz
 openwrt_dev_uefi=openwrt_x86-64-${dev_version}_uefi-gpt_dev_dscaodocker.img.gz
 cd bin/targets/x86/64
