@@ -76,7 +76,7 @@ EOF
 
 cat>dscao.sh<<-\EOOF
 #!/bin/bash
-dscao_version="`date '+%y%m%d%H%M'`_dev_Len yu" 
+dscao_version="`date '+%y%m%d%H%M'`_dev_ds cao" 
 echo $dscao_version >  wget/DISTRIB_REVISION1 
 echo $dscao_version | cut -d _ -f 1 >  files/etc/dscao_version  
 #######
@@ -106,7 +106,7 @@ EOOF
 cat>files/usr/share/Check_Update.sh<<-\EOF
 #!/bin/bash
 # https://github.com/dscao/Actions-OpenWrt-x86
-# Actions-OpenWrt-x86 By dscao 20210505
+# Actions-OpenWrt-x86 By dscao 20221021
 #path=$(dirname $(readlink -f $0))
 # cd ${path}
 #检测准备
