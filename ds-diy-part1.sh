@@ -66,7 +66,7 @@ elif [ "$str1" = "6.0" ];then
    mv  bin/targets/x86/64/openwrt-x86-64-generic-squashfs-combined.img.gz       bin/targets/x86/64/openwrt_x86-64-${rename_version}_${str1}.${ver60}_dev_dscao.img.gz
   mv  bin/targets/x86/64/openwrt-x86-64-generic-squashfs-combined-efi.img.gz   bin/targets/x86/64/openwrt_x86-64-${rename_version}_${str1}.${ver60}_uefi-gpt_dev_dscao.img.gz
 fi
-ls bin/targets/x86/64 | grep "_dscao.img" | cut -d - -f 3 | cut -d _ -f 1-2 > wget/op_version1
+ls bin/targets/x86/64 | grep "gpt_dev_dscao.img" | cut -d - -f 3 | cut -d _ -f 1-2 > wget/op_version1
 #md5
 ls -l  "bin/targets/x86/64" | awk -F " " '{print $9}' > wget/open_dev_md5
 dev_version=`grep "_uefi-gpt_dev_dscao.img.gz" wget/open_dev_md5 | cut -d - -f 3 | cut -d _ -f 1-2`
