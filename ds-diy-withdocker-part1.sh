@@ -37,7 +37,6 @@ rm -rf  bin/targets/x86/64/openwrt-x86-64-generic-squashfs-rootfs.img.gz
 rm -rf  bin/targets/x86/64/openwrt-x86-64-generic.manifest
 rm -rf bin/targets/x86/64/sha256sums
 rm -rf  bin/targets/x86/64/version.buildinfo
-
 sleep 2
 rename_version=`cat files/etc/dscao_version`
 str1=`grep "KERNEL_PATCHVER:="  target/linux/x86/Makefile | cut -d = -f 2` #判断当前默认内核版本号如5.10
@@ -46,7 +45,7 @@ ver419=`grep "LINUX_VERSION-4.19 ="  include/kernel-4.19 | cut -d . -f 3`
 ver54=`grep "LINUX_VERSION-5.4 ="  include/kernel-5.4 | cut -d . -f 3`
 ver510=`grep "LINUX_VERSION-5.10 ="  include/kernel-5.10 | cut -d . -f 3`
 ver515=`grep "LINUX_VERSION-5.15 ="  include/kernel-5.15 | cut -d . -f 3`
-ver60=`grep "LINUX_VERSION-6.0 ="  include/kernel-6.0 | cut -d . -f 3`
+ver61=`grep "LINUX_VERSION-6.1 =" include/kernel-6.1 | cut -d . -f 3`
 if [ "$str1" = "5.4" ];then
    mv  bin/targets/x86/64/openwrt-x86-64-generic-squashfs-combined.img.gz       bin/targets/x86/64/openwrt_x86-64-${rename_version}_${str1}.${ver54}_dev_dscaodocker.img.gz
   mv  bin/targets/x86/64/openwrt-x86-64-generic-squashfs-combined-efi.img.gz   bin/targets/x86/64/openwrt_x86-64-${rename_version}_${str1}.${ver54}_uefi-gpt_dev_dscaodocker.img.gz
@@ -62,19 +61,24 @@ elif [ "$str1" = "5.10" ];then
 elif [ "$str1" = "5.15" ];then
    mv  bin/targets/x86/64/openwrt-x86-64-generic-squashfs-combined.img.gz       bin/targets/x86/64/openwrt_x86-64-${rename_version}_${str1}.${ver515}_dev_dscaodocker.img.gz
   mv  bin/targets/x86/64/openwrt-x86-64-generic-squashfs-combined-efi.img.gz   bin/targets/x86/64/openwrt_x86-64-${rename_version}_${str1}.${ver515}_uefi-gpt_dev_dscaodocker.img.gz
-elif [ "$str1" = "6.0" ];then
-   mv  bin/targets/x86/64/openwrt-x86-64-generic-squashfs-combined.img.gz       bin/targets/x86/64/openwrt_x86-64-${rename_version}_${str1}.${ver60}_dev_dscaodocker.img.gz
-  mv  bin/targets/x86/64/openwrt-x86-64-generic-squashfs-combined-efi.img.gz   bin/targets/x86/64/openwrt_x86-64-${rename_version}_${str1}.${ver60}_uefi-gpt_dev_dscaodocker.img.gz
+elif [ "$str1" = "6.1" ];then
+  if [ ! $ver61 ]; then
+  mv  bin/targets/x86/64/openwrt-x86-64-generic-squashfs-combined.img.gz       bin/targets/x86/64/openwrt_x86-64-${rename_version}_${str1}.${ver61}0_dev_dscaodocker.img.gz
+  mv  bin/targets/x86/64/openwrt-x86-064-generic-squashfs-combined-efi.img.gz   bin/targets/x86/64/openwrt_x86-64-${rename_version}_${str1}.${ver61}0_uefi-gpt_dev_dscaodocker.img.gz 
+ else
+  mv  bin/targets/x86/64/openwrt-x86-64-generic-squashfs-combined.img.gz       bin/targets/x86/64/openwrt_x86-64-${rename_version}_${str1}.${ver61}_dev_dscaodocker.img.gz
+  mv  bin/targets/x86/64/openwrt-x86-64-generic-squashfs-combined-efi.img.gz   bin/targets/x86/64/openwrt_x86-64-${rename_version}_${str1}.${ver61}_uefi-gpt_dev_dscaodocker.img.gz
+   fi
 fi
-ls bin/targets/x86/64 | grep "_dscaodocker.img" | cut -d - -f 3 | cut -d _ -f 1-2 > wget/op_version1
+ls bin/targets/x86/64 | grep "gpt_dev_dscaodocker.img" | cut -d - -f 3 | cut -d _ -f 1-2 > wget/op_version1
 #md5
 ls -l  "bin/targets/x86/64" | awk -F " " '{print $9}' > wget/open_dev_md5
 dev_version=`grep "_uefi-gpt_dev_dscaodocker.img.gz" wget/open_dev_md5 | cut -d - -f 3 | cut -d _ -f 1-2`
 openwrt_dev=openwrt_x86-64-${dev_version}_dev_dscaodocker.img.gz
 openwrt_dev_uefi=openwrt_x86-64-${dev_version}_uefi-gpt_dev_dscaodocker.img.gz
 cd bin/targets/x86/64
-md5sum $openwrt_dev > openwrt_dev_docker.md5
-md5sum $openwrt_dev_uefi > openwrt_dev_uefi_docker.md5
+md5sum $openwrt_dev > openwrt_dev.md5
+md5sum $openwrt_dev_uefi > openwrt_dev_uefi.md5
 exit 0
 EOF
 
@@ -116,7 +120,7 @@ cat>files/usr/share/Check_Update.sh<<-\EOF
 #检测准备
 if [ ! -f  "/etc/dscao_version" ]; then
 	echo
-	echo -e "\033[31m 该脚本在非dscaodocker固件上运行，为避免不必要的麻烦，准备退出… \033[0m"
+	echo -e "\033[31m 该脚本在非dscao固件上运行，为避免不必要的麻烦，准备退出… \033[0m"
 	echo
 	exit 0
 fi
@@ -131,8 +135,8 @@ if [ -s  "/tmp/cloud_ts_version" ]; then
 	new_version=`cat /tmp/cloud_ts_version`
 	DEV_URL=https://github.com/dscao/Actions-OpenWrt-x86/releases/download/${new_version}/openwrt_x86-64-${new_version}_dev_dscaodocker.img.gz
 	DEV_UEFI_URL=https://github.com/dscao/Actions-OpenWrt-x86/releases/download/${new_version}/openwrt_x86-64-${new_version}_uefi-gpt_dev_dscaodocker.img.gz
-	openwrt_dev=https://github.com/dscao/Actions-OpenWrt-x86/releases/download/${new_version}/openwrt_dev_docker.md5
-	openwrt_dev_uefi=https://github.com/dscao/Actions-OpenWrt-x86/releases/download/${new_version}/openwrt_dev_uefi_docker.md5
+	openwrt_dev=https://github.com/dscao/Actions-OpenWrt-x86/releases/download/${new_version}/openwrt_dev.md5
+	openwrt_dev_uefi=https://github.com/dscao/Actions-OpenWrt-x86/releases/download/${new_version}/openwrt_dev_uefi.md5
 else
 	echo "请检测网络或重试！"
 	exit 1
@@ -151,8 +155,8 @@ fi
 if [ ! -d /sys/firmware/efi ];then
 	if [ "$current_version" != "$cloud_version" ];then
 		wget -P /tmp "$DEV_URL" -O /tmp/openwrt_x86-64-${new_version}_dev_dscaodocker.img.gz
-		wget -P /tmp "$openwrt_dev" -O /tmp/openwrt_dev_docker.md5
-		cd /tmp && md5sum -c openwrt_dev_docker.md5
+		wget -P /tmp "$openwrt_dev" -O /tmp/openwrt_dev.md5
+		cd /tmp && md5sum -c openwrt_dev.md5
 		if [ $? != 0 ]; then
       echo "您下载文件失败，请检查网络重试…"
       sleep 4
@@ -166,7 +170,7 @@ if [ ! -d /sys/firmware/efi ];then
 	fi
 else
 	if [ "$current_version" != "$cloud_version" ];then
-		wget -P /tmp "$DEV_UEFI_URL" -O /tmp/openwrt_x86-64-${new_version}_uefi-gpt_dev_dscao.img.gz
+		wget -P /tmp "$DEV_UEFI_URL" -O /tmp/openwrt_x86-64-${new_version}_uefi-gpt_dev_dscaodocker.img.gz
 		wget -P /tmp "$openwrt_dev_uefi" -O /tmp/openwrt_dev_uefi.md5
 		cd /tmp && md5sum -c openwrt_dev_uefi.md5
 		if [ $? != 0 ]; then
@@ -181,7 +185,6 @@ else
 		exit
 	fi
 fi
-
 open_up()
 {
 echo
@@ -198,7 +201,7 @@ case $num1 in
 		gzip -d openwrt_x86-64-${new_version}_dev_dscaodocker.img.gz
 		sysupgrade /tmp/openwrt_x86-64-${new_version}_dev_dscaodocker.img
 	else
-		gzip -d openwrt_x86-64-${new_version}_uefi-gpt_devdscaodocker.img.gz
+		gzip -d openwrt_x86-64-${new_version}_uefi-gpt_dev_dscaodocker.img.gz
 		sysupgrade /tmp/openwrt_x86-64-${new_version}_uefi-gpt_dev_dscaodocker.img
 	fi
     ;;
@@ -224,7 +227,6 @@ case $num1 in
 	  open_up
 esac
 }
-
 open_op()
 {
 echo
@@ -262,7 +264,7 @@ cat>files/usr/share/dscao-auto.sh<<-\EOF
 #检测准备
 if [ ! -f  "/etc/dscao_version" ]; then
 	echo
-	echo -e "\033[31m 该脚本在非dscaodocker固件上运行，为避免不必要的麻烦，准备退出… \033[0m"
+	echo -e "\033[31m 该脚本在非dscao固件上运行，为避免不必要的麻烦，准备退出… \033[0m"
 	echo
 	exit 0
 fi
@@ -277,8 +279,8 @@ if [ -s  "/tmp/cloud_ts_version" ]; then
 	new_version=`cat /tmp/cloud_ts_version`
 	DEV_URL=https://github.com/dscao/Actions-OpenWrt-x86/releases/download/${new_version}/openwrt_x86-64-${new_version}_dev_dscaodocker.img.gz
 	DEV_UEFI_URL=https://github.com/dscao/Actions-OpenWrt-x86/releases/download/${new_version}/openwrt_x86-64-${new_version}_uefi-gpt_dev_dscaodocker.img.gz
-	openwrt_dev=https://github.com/dscao/Actions-OpenWrt-x86/releases/download/${new_version}/openwrt_dev_docker.md5
-	openwrt_dev_uefi=https://github.com/dscao/Actions-OpenWrt-x86/releases/download/${new_version}/openwrt_dev_uefi_docker.md5
+	openwrt_dev=https://github.com/dscao/Actions-OpenWrt-x86/releases/download/${new_version}/openwrt_dev.md5
+	openwrt_dev_uefi=https://github.com/dscao/Actions-OpenWrt-x86/releases/download/${new_version}/openwrt_dev_uefi.md5
 else
 	echo "请检测网络或重试！"
 	exit 1
@@ -289,7 +291,7 @@ echo $Firmware_Type > /etc/dscao_firmware_type
 echo
 if [[ "$cloud_kernel" =~ "4.19" ]]; then
 	echo
-	echo -e "\033[31m 该脚本在dscaodocker固件Sta版本上运行，目前只建议在Dev版本上运行，准备退出… \033[0m"
+	echo -e "\033[31m 该脚本在dscao固件Sta版本上运行，目前只建议在Dev版本上运行，准备退出… \033[0m"
 	echo
 	exit 0
 fi
@@ -314,8 +316,8 @@ if [ ! -d /sys/firmware/efi ];then
 else
 	if [ "$current_version" != "$cloud_version" ];then
 		wget -P /tmp "$DEV_UEFI_URL" -O /tmp/openwrt_x86-64-${new_version}_uefi-gpt_dev_dscaodocker.img.gz
-		wget -P /tmp "$openwrt_dev_uefi" -O /tmp/openwrt_dev_uefi_docker.md5
-		cd /tmp && md5sum -c openwrt_dev_uefi_docker.md5
+		wget -P /tmp "$openwrt_dev_uefi" -O /tmp/openwrt_dev_uefi.md5
+		cd /tmp && md5sum -c openwrt_dev_uefi.md5
 		if [ $? != 0 ]; then
 			echo "您下载文件失败，请检查网络重试…"
 			sleep 1
@@ -329,8 +331,5 @@ else
 		exit
 	fi
 fi
-
 exit 0
 EOF
-
-
