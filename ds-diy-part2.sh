@@ -23,7 +23,7 @@ git clone -b lede https://github.com/pymumu/luci-app-smartdns.git package/luci-a
 
 # git clone -b main https://github.com/davintagas/luci-app-adguardhome package/luci-app-adguardhome
 
-git clone  https://github.com/gdy666/luci-app-lucky.git package/lucky
+# git clone  https://github.com/gdy666/luci-app-lucky.git package/lucky
 
 # 流量监控
 # svn co https://github.com/haiibo/packages/trunk/luci-app-wrtbwmon package/luci-app-wrtbwmon
