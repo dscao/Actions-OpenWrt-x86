@@ -154,7 +154,7 @@ jobs:
       id: package
       run: |
         cd openwrt
-        # echo -e 'CONFIG_DEVEL=y\nCONFIG_CCACHE=y' >> .config #Cache.Speedup
+        echo -e 'CONFIG_DEVEL=y\nCONFIG_CCACHE=y' >> .config #Cache.Speedup
         make defconfig
         make download -j8
         find dl -size -1024c -exec ls -l {} \;
@@ -252,7 +252,11 @@ jobs:
         body_path: release.txt
         files: ${{ env.FIRMWARE }}/*
 
-
+    - name: Delete workflow runs
+      uses: Lenyu2020/delete-workflow-runs@main
+      with:
+        retain_days: 1
+        keep_minimum_runs: 5
 
     - name: Remove old Releases
       uses: dev-drprasad/delete-older-releases@v0.2.1
