@@ -9,7 +9,7 @@
 # Description: Source code update checker
 #
 
-name: Update_Checker
+name: ds_Update_Checker
 
 env:
   REPO_URL_Lede: https://github.com/coolsnowwolf/lede
