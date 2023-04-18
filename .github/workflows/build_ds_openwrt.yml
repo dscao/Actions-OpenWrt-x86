@@ -93,7 +93,7 @@ jobs:
     - name: luci-app-romupdate
       run: |
         cd openwrt/package    
-        git clone -b dev https://github.com/dscao/luci-app-romupdate.git
+        git clone -b main https://github.com/dscao/luci-app-romupdate.git
     
     - name: luci-theme-argonn
       run: |
