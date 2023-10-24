@@ -21,9 +21,9 @@ svn co https://github.com/sirpdboy/sirpdboy-package/trunk/luci-app-netdata packa
 
 git clone -b lede https://github.com/pymumu/luci-app-smartdns.git package/luci-app-smartdns
 
-git clone https://github.com/AdguardTeam/AdGuardHome
+git clone https://github.com/AdguardTeam/AdGuardHome.git package/adguardhome
 
-git clone -b main https://github.com/davintagas/luci-app-adguardhome package/luci-app-adguardhome
+git clone -b main https://github.com/davintagas/luci-app-adguardhome.git package/luci-app-adguardhome
 
 # git clone  https://github.com/gdy666/luci-app-lucky.git package/lucky
 
