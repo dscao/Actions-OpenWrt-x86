@@ -145,9 +145,16 @@ jobs:
 
 
     - name: Update feeds
-      run: cd openwrt && ./scripts/feeds update -a \
-           && sed -i '/files/adguardhome.*/d' feeds/packages/net/adguardhome/Makefile \
-           && sed -i '/$(INSTALL_DIR) $(1)/etc/d' feeds/packages/net/adguardhome/Makefile
+      run: cd openwrt && ./scripts/feeds update -a
+
+    # sed -i '/files\/adguardhome.*/d' feeds/packages/net/adguardhome/Makefile
+    # sed -i '/$(INSTALL_DIR) $(1)\/etc/d' feeds/packages/net/adguardhome/Makefile
+
+    - name: Remove adguardhome
+      run: |
+        [ -e adguardhome.patch ] && mv adguardhome.patch openwrt/adguardhome.patch
+        cd openwrt
+        patch -p1 < adguardhome.patch
 
     - name: Install feeds
       run: cd openwrt && ./scripts/feeds install -a
