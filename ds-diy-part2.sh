@@ -17,8 +17,6 @@ sed -i 's/KERNEL_PATCHVER:=5.15/KERNEL_PATCHVER:=6.1/g' target/linux/x86/Makefil
 #sed -i "s/.*PKG_VERSION:=.*/PKG_VERSION:=5.0.0-stable/" package/libs/wolfssl/Makefile
 # welcome test
 
-patch -p1 < adguardhome.patch
-
 svn co https://github.com/sirpdboy/sirpdboy-package/trunk/luci-app-netdata package/luci-app-netdata
 
 git clone -b lede https://github.com/pymumu/luci-app-smartdns.git package/luci-app-smartdns
