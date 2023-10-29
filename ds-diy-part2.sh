@@ -19,9 +19,9 @@ sed -i 's/KERNEL_PATCHVER:=5.15/KERNEL_PATCHVER:=6.1/g' target/linux/x86/Makefil
 
 svn co https://github.com/sirpdboy/sirpdboy-package/trunk/luci-app-netdata package/luci-app-netdata
 
-git clone -b lede https://github.com/pymumu/luci-app-smartdns.git package/luci-app-smartdns
+# git clone -b lede https://github.com/pymumu/luci-app-smartdns.git package/luci-app-smartdns
 
-svn co https://github.com/kenzok8/openwrt-packages/trunk/luci-app-adguardhome package/luci-app-adguardhome
+# svn co https://github.com/kenzok8/openwrt-packages/trunk/luci-app-adguardhome package/luci-app-adguardhome
 
 # git clone https://github.com/AdguardTeam/AdGuardHome.git package/adguardhome
 
