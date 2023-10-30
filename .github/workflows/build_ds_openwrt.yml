@@ -146,8 +146,9 @@ jobs:
     - name: Remove adguardhome
       run: |
         cd openwrt
-        sed -i '/files/adguardhome.*/d' feeds/packages/net/adguardhome/Makefile
-        sed -i '/$(INSTALL_DIR) $(1)/etc/d' feeds/packages/net/adguardhome/Makefile
+        sed -i 's/^\t\$(INSTALL_DIR) \$(1)\/etc\/init\.d$\|^\t\$(INSTALL_BIN) \.\/files\/adguardhome\.init \$(1)\/etc\/init\.d\/adguardhome$\|^\t\$(INSTALL_DIR) \$(1)\/etc\/config$\|^\t\$(INSTALL_DATA) \.\/files\/adguardhome\.config \$(1)\/etc\/config\/adguardhome$//' feeds/packages/net/adguardhome/Makefile
+    #    sed -i '/files/adguardhome.*/d' feeds/packages/net/adguardhome/Makefile
+    #    sed -i '/$(INSTALL_DIR) $(1)/etc/d' feeds/packages/net/adguardhome/Makefile
 
    
     - name: Install feeds
