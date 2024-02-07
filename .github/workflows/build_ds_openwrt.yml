@@ -63,7 +63,7 @@ jobs:
 
     - name: Set up build environment
       run: |
-        sudo apt update
+        # sudo apt update
         sudo apt install -y clang
         
     - name: Checkout
