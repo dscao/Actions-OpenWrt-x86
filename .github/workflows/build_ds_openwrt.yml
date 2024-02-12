@@ -61,10 +61,10 @@ jobs:
         large-packages: true
         swap-storage: true
 
-    - name: Set up build environment
-      run: |
-        # sudo apt update
-        sudo apt install -y clang
+    #- name: Set up build environment
+    #  run: |
+    #    sudo apt update
+    #    sudo apt install -y clang
         
     - name: Checkout
       uses: actions/checkout@v3.1.0  
