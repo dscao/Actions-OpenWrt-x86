@@ -63,8 +63,14 @@ jobs:
 
     - name: Set up build environment
       run: |
-        sudo apt update
-        sudo apt install -y golang 
+        #sudo apt update
+        #sudo apt install -y golang
+        wget -c https://go.dev/dl/go1.22.0.linux-amd64.tar.gz
+        sudo tar -C /usr/local/ -xzf go1.22.0.linux-amd64.tar.gz
+        # set PATH so it includes /usr/local/go/bin if it exists
+        if [ -d "/usr/local/go/bin" ] ; then
+          PATH="/usr/local/go/bin:$PATH"
+        fi
         
     - name: Checkout
       uses: actions/checkout@v3.1.0  
