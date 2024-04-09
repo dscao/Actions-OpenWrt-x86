@@ -37,3 +37,7 @@ svn co https://github.com/sirpdboy/sirpdboy-package/trunk/luci-app-netdata packa
 git clone --depth=1 https://github.com/haiibo/luci-app-onliner package/luci-app-onliner
 sed -i '/bin\/sh/a\uci set nlbwmon.@nlbwmon[0].refresh_interval=2s' package/lean/default-settings/files/zzz-default-settings
 sed -i '/nlbwmon/a\uci commit nlbwmon' package/lean/default-settings/files/zzz-default-settings
+
+# luci-app-lucky
+git clone https://github.com/gdy666/luci-app-lucky.git package/lucky
+
