@@ -45,23 +45,20 @@ jobs:
 
     steps:
 
-    - name: Free Disk Space (Ubuntu)
-      uses: jlumbroso/free-disk-space@main
+    - name: Maximize Build Space
+      uses: easimon/maximize-build-space@master
       with:
-        # this might remove tools that are actually needed,
-        # if set to "true" but frees about 6 GB
-        tool-cache: true
-        
-        # all of these default to true, but feel free to set to
-        # "false" if necessary for your workflow
-        android: true
-        dotnet: true
-        haskell: true
-        large-packages: true
-        swap-storage: true
+        root-reserve-mb: 6144
+        swap-size-mb: 10240
+        remove-dotnet: 'true'
+        remove-android: 'true'
+        remove-haskell: 'true'
+        remove-codeql: 'true'
+        remove-docker-images: 'true'
+        build-mount-path: '/workdir'
         
     - name: Checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@main
       
     - name: Disk space
       run: |
@@ -114,10 +111,10 @@ jobs:
         cd openwrt/package    
         git clone -b dev https://github.com/Blueplanet20120/luci-app-romupdate.git
     
-    - name: luci-theme-argonn
+    - name: luci-theme-design
       run: |
         cd openwrt/package 		
-        git clone -b 18.06 https://github.com/jerrykuku/luci-theme-argon.git luci-theme-argonn
+        git clone https://github.com/gngpp/luci-theme-design.git luci-theme-design
         
     - name: aliyundrive-webdav
       run: |
@@ -130,9 +127,9 @@ jobs:
         git clone https://github.com/kuoruan/luci-app-frpc.git
         
     #- name: luci-app-adguardhome
-    #  run: |
-   #   cd openwrt/package 
-     #   git clone https://github.com/uamrws/luci-app-adguardhome.git
+      #run: |
+         #cd openwrt/package 
+         #git clone https://github.com/uamrws/luci-app-adguardhome.git
     
     - name: Load custom feeds
       run: |
@@ -262,7 +259,7 @@ jobs:
         echo "status=success" >> $GITHUB_OUTPUT
 
     - name: Upload firmware to release
-      uses: softprops/action-gh-release@v1
+      uses: softprops/action-gh-release@master
       if: steps.tag.outputs.status == 'success' && !cancelled()
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -278,10 +275,10 @@ jobs:
         keep_minimum_runs: 5
 
     - name: Remove old Releases
-      uses: dev-drprasad/delete-older-releases@v0.3.2
+      uses: dev-drprasad/delete-older-releases@master
       if: env.UPLOAD_RELEASE == 'true' && !cancelled()
       with:
-        keep_latest: 20
+        keep_latest: 10
         delete_tags: true
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
