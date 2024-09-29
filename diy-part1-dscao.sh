@@ -18,6 +18,9 @@ echo "src-git helloworld https://github.com/fw876/helloworld.git" >> "feeds.conf
 # Add passwall
 echo "src-git passwall https://github.com/xiaorouji/openwrt-passwall.git;main" >> "feeds.conf.default"
 #
+# Add onliner
+echo "src-git onliner https://github.com/haiibo/luci-app-onliner.git;master" >> "feeds.conf.default"
+#
 mkdir -p files/usr/share
 mkdir -p files/etc/
 touch files/etc/dscao_version
