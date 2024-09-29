@@ -110,7 +110,7 @@ EOF
 
 cat>dscao.sh<<-\EOOF
 #!/bin/bash
-dscao_version="`date '+%y%m%d%H%M'`_dev_dscao" 
+dscao_version="`date '+%y%m%d%H%M'`_dev_ds cao" 
 echo $dscao_version >  wget/DISTRIB_REVISION1 
 echo $dscao_version | cut -d _ -f 1 >  files/etc/dscao_version  
 #######
