@@ -135,10 +135,10 @@ jobs:
         $GITHUB_WORKSPACE/$DIY_P1_SH
         
    
-    - name: lenyu
+    - name: dscao
       run: |
         cd openwrt 
-        bash  lenyu.sh
+        bash  dscao.sh
 
 
     - name: Update feeds
@@ -265,7 +265,7 @@ jobs:
         files: ${{ env.FIRMWARE }}/*
 
     - name: Delete workflow runs
-      uses: Lenyu2020/delete-workflow-runs@main
+      uses: dscao/delete-workflow-runs@main
       with:
         retain_days: 1
         keep_minimum_runs: 5
