@@ -21,15 +21,6 @@ echo "src-git passwall https://github.com/xiaorouji/openwrt-passwall.git;main" >
 # Add onliner
 echo "src-git onliner https://github.com/haiibo/luci-app-onliner.git;master" >> "feeds.conf.default"
 #
-# Add mosdns
-echo "src-git mosdns https://github.com/sbwml/luci-app-mosdn.git;v5" >> "feeds.conf.default"
-#
-# Add v2ray-geodata
-echo "src-git v2ray-geodata https://github.com/sbwml/v2ray-geodata.git;master" >> "feeds.conf.default"
-#
-# Add v2ray-geodata
-echo "src-git frp https://github.com/kuoruan/openwrt-frp.git;master" >> "feeds.conf.default"
-#
 
 mkdir -p files/usr/share
 mkdir -p files/etc/
