@@ -127,13 +127,7 @@ jobs:
       run: |
         cd openwrt/package 
         git clone https://github.com/kuoruan/luci-app-frpc.git
-        git clone https://github.com/kuoruan/openwrt-frp.git package/frp
-
-        https://github.com/lwz322/luci-app-frps
-
-    - name: frp
-      run: |
-        cd openwrt/package
+        # git clone https://github.com/kuoruan/openwrt-frp.git package/frp
         git clone https://github.com/lwz322/luci-app-frps.git
         wget https://github.com/fatedier/frp/releases/download/v0.61.0/frp_0.61.0_linux_amd64.tar.gz
         tar -zxvf frp_0.61.0_linux_amd64.tar.gz
