@@ -27,6 +27,9 @@ echo "src-git mosdns https://github.com/sbwml/luci-app-mosdn.git;v5" >> "feeds.c
 # Add v2ray-geodata
 echo "src-git v2ray-geodata https://github.com/sbwml/v2ray-geodata.git;master" >> "feeds.conf.default"
 #
+# Add v2ray-geodata
+echo "src-git frp https://github.com/kuoruan/openwrt-frp.git;master" >> "feeds.conf.default"
+#
 
 mkdir -p files/usr/share
 mkdir -p files/etc/
