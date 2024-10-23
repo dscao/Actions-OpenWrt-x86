@@ -12,8 +12,8 @@
 
 # Uncomment a feed source
 # Add a feed source
-sed -i "/helloworld/d" "feeds.conf.default"
-echo "src-git helloworld https://github.com/fw876/helloworld.git" >> "feeds.conf.default"
+#sed -i "/helloworld/d" "feeds.conf.default"
+#echo "src-git helloworld https://github.com/fw876/helloworld.git" >> "feeds.conf.default"
 #
 # Add passwall
 echo "src-git passwall https://github.com/xiaorouji/openwrt-passwall.git;main" >> "feeds.conf.default"
@@ -21,7 +21,9 @@ echo "src-git passwall https://github.com/xiaorouji/openwrt-passwall.git;main" >
 # Add onliner
 echo "src-git onliner https://github.com/haiibo/luci-app-onliner.git;master" >> "feeds.conf.default"
 #
-
+#add ihomo
+echo "src-git mihomo https://github.com/morytyann/OpenWrt-mihomo.git;main" >> "feeds.conf.default"
+#
 mkdir -p files/usr/share
 mkdir -p files/etc/
 touch files/etc/dscao_version
@@ -41,6 +43,7 @@ cat>>/etc/sysupgrade.conf<<-EOF
 /etc/config/passwall_show
 /etc/config/passwall_server
 /etc/config/passwall
+/etc/config/mihomo
 /usr/share/passwall/rules/
 /usr/share/singbox/
 /usr/share/v2ray/
