@@ -125,12 +125,13 @@ jobs:
        
     - name: luci-app-frp
       run: |
-        cd openwrt/package
+        cd openwrt/package/lean
         rm -rf frp
-        # rm -rf luci-app-frpc
-        # rm -rf luci-app-frps
-        # git clone https://github.com/kuoruan/luci-app-frpc.git
-        # git clone https://github.com/lwz322/luci-app-frps.git
+        rm -rf luci-app-frpc
+        rm -rf luci-app-frps
+        cd ..
+        git clone https://github.com/kuoruan/luci-app-frpc.git
+        git clone https://github.com/lwz322/luci-app-frps.git
         # git clone https://github.com/kuoruan/openwrt-frp.git package/frp
         wget https://github.com/fatedier/frp/releases/download/v0.61.0/frp_0.61.0_linux_amd64.tar.gz
         tar -zxvf frp_0.61.0_linux_amd64.tar.gz
