@@ -34,7 +34,6 @@ touch files/usr/share/dscao-pw.sh
 
 # backup config
 cat>>/etc/sysupgrade.conf<<-EOF
-/etc/shadow
 /etc/config/dhcp
 /etc/config/sing-box
 /etc/config/romupdate
