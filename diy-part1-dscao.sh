@@ -36,7 +36,6 @@ touch files/usr/share/dscao-pw.sh
 
 # backup config
 cat>>/etc/sysupgrade.conf<<-EOF
-/var/etc/
 /usr/share/passwall/rules/
 /usr/share/singbox/
 /usr/share/v2ray/
