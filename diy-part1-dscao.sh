@@ -36,14 +36,7 @@ touch files/usr/share/dscao-pw.sh
 
 # backup config
 cat>>/etc/sysupgrade.conf<<-EOF
-/etc/shadow
-/etc/config/dhcp
-/etc/config/sing-box
-/etc/config/romupdate
-/etc/config/passwall_show
-/etc/config/passwall_server
-/etc/config/passwall
-/etc/config/mihomo
+/etc/
 /usr/share/passwall/rules/
 /usr/share/singbox/
 /usr/share/v2ray/
