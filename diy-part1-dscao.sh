@@ -48,6 +48,8 @@ cat>>/etc/sysupgrade.conf<<-EOF
 /usr/bin/xray
 /usr/share/v2ray/geoip.dat
 /usr/share/v2ray/geosite.dat
+/usr/share/singbox/geoip.db
+/usr/share/singbox/geosite.db
 EOF
 
 
