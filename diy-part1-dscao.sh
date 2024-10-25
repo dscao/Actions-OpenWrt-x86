@@ -17,7 +17,7 @@ echo "src-git helloworld https://github.com/fw876/helloworld.git" >> "feeds.conf
 #
 # Add passwall
 echo "src-git passwall https://github.com/xiaorouji/openwrt-passwall.git;main" >> "feeds.conf.default"
-echo "src-git passwall https://github.com/xiaorouji/openwrt-passwall2.git;main" >> "feeds.conf.default"
+echo "src-git passwall2 https://github.com/xiaorouji/openwrt-passwall2.git;main" >> "feeds.conf.default"
 #
 # Add onliner
 echo "src-git onliner https://github.com/haiibo/luci-app-onliner.git;master" >> "feeds.conf.default"
