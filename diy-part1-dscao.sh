@@ -37,10 +37,11 @@ touch files/usr/share/dscao-pw.sh
 
 # backup config
 cat>>/etc/sysupgrade.conf<<-EOF
-/usr/share/passwall/rules/
-/usr/share/singbox/
-/usr/share/v2ray/
-/etc/openclash/core/
+/usr/share/passwall
+/usr/share/passwall2
+/usr/share/singbox
+/usr/share/v2ray
+/etc/openclash/core
 /usr/bin/chinadns-ng
 /usr/bin/sing-box
 /usr/bin/hysteria
