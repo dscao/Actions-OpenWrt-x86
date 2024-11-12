@@ -131,7 +131,7 @@ jobs:
       run: |
         cd openwrt/package 
         git clone --depth=1 https://github.com/danchexiaoyang/luci-app-onliner
-        mv luci-app-onliner/luci-app-onliner .
+        mv luci-app-onliner/luci-app-onliner/* luci-app-onliner
 
     
     - name: Load custom feeds
