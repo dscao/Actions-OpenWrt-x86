@@ -130,7 +130,7 @@ jobs:
     #- name: luci-app-onliner
     #  run: |
     #    cd openwrt/package 
-    #    git clone --depth=1 https://github.com/haiibo/luci-app-onliner
+    #    git clone --depth=1 https://github.com/danchexiaoyang/luci-app-onliner
     
     - name: Load custom feeds
       run: |
