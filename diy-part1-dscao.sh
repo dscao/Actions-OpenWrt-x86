@@ -20,7 +20,7 @@ echo "src-git passwall https://github.com/xiaorouji/openwrt-passwall.git;main" >
 # echo "src-git passwall2 https://github.com/xiaorouji/openwrt-passwall2.git;main" >> "feeds.conf.default"
 #
 # Add onliner
-echo "src-git onliner https://github.com/danchexiaoyang/luci-app-onliner.git;master" >> "feeds.conf.default"
+echo "src-git onliner https://github.com/danchexiaoyang/luci-app-onliner.git;main" >> "feeds.conf.default"
 #
 #add ihomo
 # echo "src-git mihomo https://github.com/morytyann/OpenWrt-mihomo.git;main" >> "feeds.conf.default"
