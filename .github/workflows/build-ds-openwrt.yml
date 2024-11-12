@@ -127,10 +127,10 @@ jobs:
     # echo 'src-git frp https://github.com/fatedier/frp' >> feeds.conf.default
     
     # 在线用户
-    #- name: luci-app-onliner
-    #  run: |
-    #    cd openwrt/package 
-    #    git clone --depth=1 https://github.com/danchexiaoyang/luci-app-onliner
+    - name: luci-app-onliner
+      run: |
+        cd openwrt/package 
+        git clone --depth=1 https://github.com/danchexiaoyang/luci-app-onliner
     
     - name: Load custom feeds
       run: |
