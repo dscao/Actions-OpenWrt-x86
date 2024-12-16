@@ -263,11 +263,9 @@ case $num1 in
 	echo
 	sleep 3
 	if [ ! -d /sys/firmware/efi ];then
-		gzip -d openwrt_x86-64-${new_version}_dev_dscao.img.gz
-		sysupgrade /tmp/openwrt_x86-64-${new_version}_dev_dscao.img
+		sysupgrade /tmp/openwrt_x86-64-${new_version}_dev_dscao.img.gz
 	else
-		gzip -d openwrt_x86-64-${new_version}_uefi-gpt_dev_dscao.img.gz
-		sysupgrade /tmp/openwrt_x86-64-${new_version}_uefi-gpt_dev_dscao.img
+		sysupgrade /tmp/openwrt_x86-64-${new_version}_uefi-gpt_dev_dscao.img.gz
 	fi
     ;;
     n|N)
@@ -276,11 +274,9 @@ case $num1 in
     echo
     sleep 3
 	if [ ! -d /sys/firmware/efi ];then
-		gzip -d openwrt_x86-64-${new_version}_dev_dscao.img.gz
-		sysupgrade -n  /tmp/openwrt_x86-64-${new_version}_dev_dscao.img
+		sysupgrade -n  /tmp/openwrt_x86-64-${new_version}_dev_dscao.img.gz
 	else
-		gzip -d openwrt_x86-64-${new_version}_uefi-gpt_dev_dscao.img.gz
-		sysupgrade -n  /tmp/openwrt_x86-64-${new_version}_uefi-gpt_dev_dscao.img
+		sysupgrade -n  /tmp/openwrt_x86-64-${new_version}_uefi-gpt_dev_dscao.img.gz
 	fi
     ;;
     *)
@@ -362,12 +358,6 @@ fi
 Firmware_Type="$(grep 'DISTRIB_ARCH=' /etc/openwrt_release | cut -d \' -f 2)"
 echo $Firmware_Type > /etc/dscao_firmware_type
 echo
-if [[ "$cloud_kernel" =~ "4.19" ]]; then
-	echo
-	echo -e "\033[31m 该脚本在dscao固件Sta版本上运行，目前只建议在Dev版本上运行，准备退出… \033[0m"
-	echo
-	exit 0
-fi
 #md5值验证，固件类型判断
 if [ ! -d /sys/firmware/efi ];then
 	if [ "$current_version" != "$cloud_version" ];then
@@ -379,8 +369,7 @@ if [ ! -d /sys/firmware/efi ];then
 		  sleep 4
 		  exit
 		fi
-		gzip -d /tmp/openwrt_x86-64-${new_version}_dev_dscao.img.gz
-		sysupgrade /tmp/openwrt_x86-64-${new_version}_dev_dscao.img
+		sysupgrade /tmp/openwrt_x86-64-${new_version}_dev_dscao.img.gz
 	else
 		echo -e "\033[32m 本地已经是最新版本，还更个鸡巴毛啊… \033[0m"
 		echo
