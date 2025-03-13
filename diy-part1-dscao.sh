@@ -22,8 +22,8 @@ echo "src-git passwall https://github.com/xiaorouji/openwrt-passwall.git;main" >
 # Add onliner
 echo "src-git onliner https://github.com/danchexiaoyang/luci-app-onliner.git;main" >> "feeds.conf.default"
 #
-#add ihomo
-# echo "src-git mihomo https://github.com/morytyann/OpenWrt-mihomo.git;main" >> "feeds.conf.default"
+#add nikki
+echo "src-git nikki https://github.com/nikkinikki-org/OpenWrt-nikki.git;main" >> "feeds.conf.default"
 #
 mkdir -p files/usr/share
 mkdir -p files/etc/
