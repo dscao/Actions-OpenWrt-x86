@@ -34,8 +34,8 @@ CONFIG_PACKAGE_ddns-scripts_aliyun=y
 CONFIG_PACKAGE_ddns-scripts_cloudflare.com-v4=y
 CONFIG_PACKAGE_ddns-scripts_dnspod=y
 CONFIG_PACKAGE_ddns-scripts_godaddy.com-v1=y
-# CONFIG_PACKAGE_frpc=y
-# CONFIG_PACKAGE_frps=y
+CONFIG_PACKAGE_frpc=y
+CONFIG_PACKAGE_frps=y
 CONFIG_PACKAGE_haproxy=y
 CONFIG_PACKAGE_hysteria=y
 # CONFIG_PACKAGE_intel-microcode is not set
@@ -120,8 +120,8 @@ CONFIG_PACKAGE_luci-app-diskman=y
 CONFIG_PACKAGE_luci-app-diskman_INCLUDE_btrfs_progs=y
 CONFIG_PACKAGE_luci-app-diskman_INCLUDE_lsblk=y
 # CONFIG_PACKAGE_luci-app-filetransfer is not set
-# CONFIG_PACKAGE_luci-app-frpc=y
-# CONFIG_PACKAGE_luci-app-frps=y
+CONFIG_PACKAGE_luci-app-frpc=y
+CONFIG_PACKAGE_luci-app-frps=y
 CONFIG_PACKAGE_luci-app-ipsec-vpnd=y
 CONFIG_PACKAGE_luci-app-lucky=y
 # CONFIG_PACKAGE_luci-app-mihomo=y
