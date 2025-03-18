@@ -15,6 +15,8 @@
 sed -i "/helloworld/d" "feeds.conf.default"
 echo "src-git helloworld https://github.com/fw876/helloworld.git" >> "feeds.conf.default"
 #
+sed -i '$a src-git smpackage https://github.com/kenzok8/small-package' feeds.conf.default
+
 # Add passwall
 echo "src-git passwall https://github.com/xiaorouji/openwrt-passwall.git;main" >> "feeds.conf.default"
 # echo "src-git passwall2 https://github.com/xiaorouji/openwrt-passwall2.git;main" >> "feeds.conf.default"
@@ -25,6 +27,7 @@ echo "src-git onliner https://github.com/danchexiaoyang/luci-app-onliner.git;mai
 # Add lucky
 echo "src-git lucky https://github.com/gdy666/luci-app-lucky.git;main" >> "feeds.conf.default"
 #
+https://github.com/kenzok8/small-package
 #add nikki
 # echo "src-git nikki https://github.com/nikkinikki-org/OpenWrt-nikki.git;main" >> "feeds.conf.default"
 #
