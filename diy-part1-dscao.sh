@@ -22,6 +22,9 @@ echo "src-git passwall https://github.com/xiaorouji/openwrt-passwall.git;main" >
 # Add onliner
 echo "src-git onliner https://github.com/danchexiaoyang/luci-app-onliner.git;main" >> "feeds.conf.default"
 #
+# Add lucky
+echo "src-git lucky https://github.com/gdy666/luci-app-lucky.git;main" >> "feeds.conf.default"
+#
 #add nikki
 # echo "src-git nikki https://github.com/nikkinikki-org/OpenWrt-nikki.git;main" >> "feeds.conf.default"
 #
