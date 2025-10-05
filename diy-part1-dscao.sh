@@ -15,21 +15,8 @@
 sed -i "/helloworld/d" "feeds.conf.default"
 echo "src-git helloworld https://github.com/fw876/helloworld.git" >> "feeds.conf.default"
 #
-sed -i '$a src-git smpackage https://github.com/kenzok8/small-package' feeds.conf.default
-
 # Add passwall
 echo "src-git passwall https://github.com/xiaorouji/openwrt-passwall.git;main" >> "feeds.conf.default"
-# echo "src-git passwall2 https://github.com/xiaorouji/openwrt-passwall2.git;main" >> "feeds.conf.default"
-#
-# Add onliner
-echo "src-git onliner https://github.com/danchexiaoyang/luci-app-onliner.git;main" >> "feeds.conf.default"
-#
-# Add lucky
-echo "src-git lucky https://github.com/gdy666/luci-app-lucky.git;main" >> "feeds.conf.default"
-#
-https://github.com/kenzok8/small-package
-#add nikki
-# echo "src-git nikki https://github.com/nikkinikki-org/OpenWrt-nikki.git;main" >> "feeds.conf.default"
 #
 mkdir -p files/usr/share
 mkdir -p files/etc/
@@ -43,91 +30,85 @@ touch files/usr/share/dscao-pw.sh
 
 # backup config
 cat>>/etc/sysupgrade.conf<<-EOF
-/usr/share/passwall
-/usr/share/passwall2
-/usr/share/singbox
-/usr/share/v2ray
-/etc/openclash/core
+/etc/config/dhcp
+/etc/config/sing-box
+/etc/config/romupdate
+/etc/config/passwall_show
+/etc/config/passwall_server
+/etc/config/passwall
+/usr/share/passwall/rules/
+/usr/share/singbox/
+/usr/share/v2ray/
+/etc/openclash/core/
 /usr/bin/chinadns-ng
 /usr/bin/sing-box
 /usr/bin/hysteria
 /usr/bin/xray
 /usr/share/v2ray/geoip.dat
 /usr/share/v2ray/geosite.dat
-/usr/share/singbox/geoip.db
-/usr/share/singbox/geosite.db
 EOF
 
 
 cat>rename.sh<<-\EOF
 #!/bin/bash
-rm -rf  bin/targets/x86/64/config.buildinfo
-rm -rf  bin/targets/x86/64/feeds.buildinfo
-rm -rf  bin/targets/x86/64/openwrt-x86-64-generic-kernel.bin
-rm -rf  bin/targets/x86/64/openwrt-x86-64-generic-squashfs-combined-efi.vmdk
-rm -rf  bin/targets/x86/64/openwrt-x86-64-generic-squashfs-combined.vmdk
-rm -rf  bin/targets/x86/64/openwrt-x86-64-generic-squashfs-rootfs.img.gz
-rm -rf  bin/targets/x86/64/openwrt-x86-64-generic.manifest
+
+# 清理旧文件
+rm -rf bin/targets/x86/64/config.buildinfo
+rm -rf bin/targets/x86/64/feeds.buildinfo
+rm -rf bin/targets/x86/64/openwrt-x86-64-generic-kernel.bin
+rm -rf bin/targets/x86/64/openwrt-x86-64-generic-squashfs-combined-efi.vmdk
+rm -rf bin/targets/x86/64/openwrt-x86-64-generic-squashfs-combined.vmdk
+rm -rf bin/targets/x86/64/openwrt-x86-64-generic-squashfs-rootfs.img.gz
+rm -rf bin/targets/x86/64/openwrt-x86-64-generic.manifest
 rm -rf bin/targets/x86/64/sha256sums
-rm -rf  bin/targets/x86/64/version.buildinfo
+rm -rf bin/targets/x86/64/version.buildinfo
 sleep 2
-rename_version=`cat files/etc/dscao_version`
-str1=`grep "KERNEL_PATCHVER:="  target/linux/x86/Makefile | cut -d = -f 2` #判断当前默认内核版本号如5.10
-ver54=`grep "LINUX_VERSION-5.4 ="  include/kernel-5.4 | cut -d . -f 3`
-ver510=`grep "LINUX_VERSION-5.10 ="  include/kernel-5.10 | cut -d . -f 3`
-ver515=`grep "LINUX_VERSION-5.15 ="  include/kernel-5.15 | cut -d . -f 3`
-ver61=`grep "LINUX_VERSION-6.1 ="  include/kernel-6.1 | cut -d . -f 3`
-ver66=`grep "LINUX_VERSION-6.6 ="  include/kernel-6.6 | cut -d . -f 3`
-ver612=`grep "LINUX_VERSION-6.12 ="  include/kernel-6.12 | cut -d . -f 3`
-if [ "$str1" = "5.4" ];then
-   mv  bin/targets/x86/64/openwrt-x86-64-generic-squashfs-combined.img.gz       bin/targets/x86/64/openwrt_x86-64-${rename_version}_${str1}.${ver54}_dev_dscao.img.gz
-  mv  bin/targets/x86/64/openwrt-x86-64-generic-squashfs-combined-efi.img.gz   bin/targets/x86/64/openwrt_x86-64-${rename_version}_${str1}.${ver54}_uefi-gpt_dev_dscao.img.gz
-elif [ "$str1" = "5.10" ];then
-   mv  bin/targets/x86/64/openwrt-x86-64-generic-squashfs-combined.img.gz       bin/targets/x86/64/openwrt_x86-64-${rename_version}_${str1}.${ver510}_dev_dscao.img.gz
-  mv  bin/targets/x86/64/openwrt-x86-64-generic-squashfs-combined-efi.img.gz   bin/targets/x86/64/openwrt_x86-64-${rename_version}_${str1}.${ver510}_uefi-gpt_dev_dscao.img.gz
-elif [ "$str1" = "5.15" ];then
-   mv  bin/targets/x86/64/openwrt-x86-64-generic-squashfs-combined.img.gz       bin/targets/x86/64/openwrt_x86-64-${rename_version}_${str1}.${ver515}_dev_dscao.img.gz
-  mv  bin/targets/x86/64/openwrt-x86-64-generic-squashfs-combined-efi.img.gz   bin/targets/x86/64/openwrt_x86-64-${rename_version}_${str1}.${ver515}_uefi-gpt_dev_dscao.img.gz
-elif [ "$str1" = "6.1" ];then
-  if [ ! $ver61 ]; then
-  mv  bin/targets/x86/64/openwrt-x86-64-generic-squashfs-combined.img.gz       bin/targets/x86/64/openwrt_x86-64-${rename_version}_${str1}.${ver61}0_dev_dscao.img.gz
-  mv  bin/targets/x86/64/openwrt-x86-64-generic-squashfs-combined-efi.img.gz   bin/targets/x86/64/openwrt_x86-64-${rename_version}_${str1}.${ver61}0_uefi-gpt_dev_dscao.img.gz
- else
-  mv  bin/targets/x86/64/openwrt-x86-64-generic-squashfs-combined.img.gz       bin/targets/x86/64/openwrt_x86-64-${rename_version}_${str1}.${ver61}_dev_dscao.img.gz
-  mv  bin/targets/x86/64/openwrt-x86-64-generic-squashfs-combined-efi.img.gz   bin/targets/x86/64/openwrt_x86-64-${rename_version}_${str1}.${ver61}_uefi-gpt_dev_dscao.img.gz
-   fi 
-elif [ "$str1" = "6.6" ];then
-  if [ ! $ver66 ]; then
-  mv  bin/targets/x86/64/openwrt-x86-64-generic-squashfs-combined.img.gz       bin/targets/x86/64/openwrt_x86-64-${rename_version}_${str1}.${ver66}0_dev_dscao.img.gz
-  mv  bin/targets/x86/64/openwrt-x86-64-generic-squashfs-combined-efi.img.gz   bin/targets/x86/64/openwrt_x86-64-${rename_version}_${str1}.${ver66}0_uefi-gpt_dev_dscao.img.gz
- else
-  mv  bin/targets/x86/64/openwrt-x86-64-generic-squashfs-combined.img.gz       bin/targets/x86/64/openwrt_x86-64-${rename_version}_${str1}.${ver66}_dev_dscao.img.gz
-  mv  bin/targets/x86/64/openwrt-x86-64-generic-squashfs-combined-efi.img.gz   bin/targets/x86/64/openwrt_x86-64-${rename_version}_${str1}.${ver66}_uefi-gpt_dev_dscao.img.gz
-   fi
-elif [ "$str1" = "6.12" ];then
-  if [ ! $ver612 ]; then
-  mv  bin/targets/x86/64/openwrt-x86-64-generic-squashfs-combined.img.gz       bin/targets/x86/64/openwrt_x86-64-${rename_version}_${str1}.${ver612}0_dev_dscao.img.gz
-  mv  bin/targets/x86/64/openwrt-x86-64-generic-squashfs-combined-efi.img.gz   bin/targets/x86/64/openwrt_x86-64-${rename_version}_${str1}.${ver612}0_uefi-gpt_dev_dscao.img.gz
- else
-  mv  bin/targets/x86/64/openwrt-x86-64-generic-squashfs-combined.img.gz       bin/targets/x86/64/openwrt_x86-64-${rename_version}_${str1}.${ver612}_dev_dscao.img.gz
-  mv  bin/targets/x86/64/openwrt-x86-64-generic-squashfs-combined-efi.img.gz   bin/targets/x86/64/openwrt_x86-64-${rename_version}_${str1}.${ver612}_uefi-gpt_dev_dscao.img.gz
-   fi
+
+# 读取版本号与内核补丁版本
+rename_version=$(cat files/etc/dscao_version)
+str1=$(grep "KERNEL_PATCHVER:=" target/linux/x86/Makefile | cut -d '=' -f2)
+
+# 动态获取补丁小版本
+kernel_include_file="include/kernel-${str1}"
+if [ -f "$kernel_include_file" ]; then
+    ver=$(grep "LINUX_VERSION-${str1} =" "$kernel_include_file" | cut -d '.' -f3)
+else
+    ver=""
 fi
-ls bin/targets/x86/64 | grep "gpt_dev_dscao.img" | cut -d - -f 3 | cut -d _ -f 1-2 > wget/op_version1
-#md5
-ls -l  "bin/targets/x86/64" | awk -F " " '{print $9}' > wget/open_dev_md5
-dev_version=`grep "_uefi-gpt_dev_dscao.img.gz" wget/open_dev_md5 | cut -d - -f 3 | cut -d _ -f 1-2`
+
+# 定义源镜像和目标名称前缀
+src_img=bin/targets/x86/64/openwrt-x86-64-generic-squashfs-combined.img.gz
+src_efi=bin/targets/x86/64/openwrt-x86-64-generic-squashfs-combined-efi.img.gz
+base="openwrt_x86-64-${rename_version}_${str1}.${ver}"
+
+# 重命名镜像，添加存在性检查
+if [ -f "$src_img" ] && [ -f "$src_efi" ]; then
+    mv "$src_img"   "bin/targets/x86/64/${base}_dev_dscao.img.gz"
+    mv "$src_efi"   "bin/targets/x86/64/${base}_uefi-gpt_dev_dscao.img.gz"
+else
+    echo "镜像文件不存在，无法重命名：$src_img 或 $src_efi"
+fi
+
+# 生成版本列表
+ls bin/targets/x86/64 | grep "gpt_dev_dscao.img" | cut -d '-' -f3 | cut -d '_' -f1-2 > wget/op_version1
+
+# 生成 MD5 列表
+ls -1 bin/targets/x86/64 > wget/open_dev_md5
+dev_version=$(grep "_uefi-gpt_dev_dscao.img.gz" wget/open_dev_md5 | cut -d '-' -f3 | cut -d '_' -f1-2)
 openwrt_dev=openwrt_x86-64-${dev_version}_dev_dscao.img.gz
 openwrt_dev_uefi=openwrt_x86-64-${dev_version}_uefi-gpt_dev_dscao.img.gz
-cd bin/targets/x86/64
-md5sum $openwrt_dev > openwrt_dev.md5
-md5sum $openwrt_dev_uefi > openwrt_dev_uefi.md5
+
+# 切换目录并生成 MD5 文件
+cd bin/targets/x86/64 || exit 1
+md5sum "$openwrt_dev" > openwrt_dev.md5
+md5sum "$openwrt_dev_uefi" > openwrt_dev_uefi.md5
+
 exit 0
 EOF
 
 cat>dscao.sh<<-\EOOF
 #!/bin/bash
-dscao_version="`date '+%y%m%d%H%M'`_dev_ds cao" 
+dscao_version="`date '+%y%m%d%H%M'`_dev_Len yu" 
 echo $dscao_version >  wget/DISTRIB_REVISION1 
 echo $dscao_version | cut -d _ -f 1 >  files/etc/dscao_version  
 #######
@@ -276,7 +257,7 @@ case $num1 in
 	echo
 	sleep 3
 	if [ ! -d /sys/firmware/efi ];then
-		sysupgrade /tmp/openwrt_x86-64-${new_version}_dev_dscao.img.gz
+		sysupgrade /tmp/openwrt_x86-64-${new_version}_dev_dscao.img.gz		
 	else
 		sysupgrade /tmp/openwrt_x86-64-${new_version}_uefi-gpt_dev_dscao.img.gz
 	fi
@@ -398,8 +379,7 @@ else
 			sleep 1
 			exit
 		fi
-		gzip -d /tmp/openwrt_x86-64-${new_version}_uefi-gpt_dev_dscao.img.gz
-		sysupgrade /tmp/openwrt_x86-64-${new_version}_uefi-gpt_dev_dscao.img
+		sysupgrade /tmp/openwrt_x86-64-${new_version}_uefi-gpt_dev_dscao.img.gz
 	else
 		echo -e "\033[32m 本地已经是最新版本，还更个鸡巴毛啊… \033[0m"
 		echo
@@ -415,6 +395,8 @@ cat>files/usr/share/dscao-pw.sh<<-\EOF
 # Define variables
 TEMP_DIR="/tmp/test"
 PSVERSION_FILE="/usr/share/psversion"
+UNZIP_URL="https://downloads.openwrt.org/releases/packages-23.05/x86_64/packages/unzip_6.0-8_x86_64.ipk"
+UNZIP_PACKAGE="unzip_6.0-8_x86_64.ipk"
 RED='\033[0;31m'    # Red color
 BLUE='\033[0;34m'   # Blue color
 ORANGE='\033[0;33m' # Orange color
@@ -437,8 +419,29 @@ echo_orange() {
 
 # Preparing for update (blue message)
 echo_blue "正在做更新前的准备工作..."
-opkg update >/dev/null 2>&1
-opkg install unzip >/dev/null 2>&1
+# 检查 unzip 是否已安装
+if opkg list-installed | grep -q unzip; then
+    echo "unzip 已经安装，跳过安装步骤。"
+else
+    # 下载 unzip 包
+    echo "开始下载 unzip 包..."
+    wget -q --show-progress "$UNZIP_URL" -O "$UNZIP_PACKAGE"
+
+    # 检查下载是否成功
+    if [ $? -eq 0 ]; then
+        echo "下载成功，开始安装 unzip 包..."
+        opkg install "$UNZIP_PACKAGE"
+        
+        # 检查安装是否成功
+        if [ $? -eq 0 ]; then
+            echo "unzip 安装成功！"
+        else
+            echo "unzip 安装失败！"
+        fi
+    else
+        echo "unzip 下载失败！"
+    fi
+fi
 
 # Create temporary directory
 mkdir -p "$TEMP_DIR"
@@ -446,25 +449,35 @@ mkdir -p "$TEMP_DIR"
 # Get the latest release information from GitHub
 latest_release=$(curl -s https://api.github.com/repos/xiaorouji/openwrt-passwall/releases/latest)
 
-# Extract version number from GitHub release
+# Extract version number from GitHub release (例如 "25.3.9-1")
 version=$(echo "$latest_release" | grep '"tag_name":' | sed -E 's/.*"tag_name": "([^"]+)".*/\1/')
 
-# Extract download URLs
-luci_app_passwall_url=$(echo "$latest_release" | grep -o '"browser_download_url": "[^"]*luci-23.05_luci-app-passwall_[^"]*"' | sed -E 's/.*"browser_download_url": "([^"]+)".*/\1/')
-luci_i18n_passwall_url=$(echo "$latest_release" | grep -o '"browser_download_url": "[^"]*luci-23.05_luci-i18n-passwall-zh-cn_[^"]*"' | sed -E 's/.*"browser_download_url": "([^"]+)".*/\1/')
 
-# Get installed version from the system and save to psversion file
+# Extract download URLs
+luci_app_passwall_url=$(echo "$latest_release" | grep -o '"browser_download_url": "[^"]*luci-24.10_luci-app-passwall_[^"]*"' | sed -E 's/.*"browser_download_url": "([^"]+)".*/\1/')
+luci_i18n_passwall_url=$(echo "$latest_release" | grep -o '"browser_download_url": "[^"]*luci-24.10_luci-i18n-passwall-zh-cn_[^"]*"' | sed -E 's/.*"browser_download_url": "([^"]+)".*/\1/')
+
+# 获取文件名（例如 luci-24.10_luci-app-passwall_25.3.9-r1_all.ipk）
+app_file=$(basename "$luci_app_passwall_url")
+i18n_file=$(basename "$luci_i18n_passwall_url")
+
+# 从 app_file 中提取版本号部分，即 "25.3.9-r1"
+version2410=$(echo "$app_file" | sed -E 's/^luci-24\.10_luci-app-passwall_([^_]+)_all\.ipk$/\1/')
+echo_blue "最新云端版本号：$version2410"
+
+# 将当前安装的版本写入 psversion 文件
 opkg list-installed | grep luci-app-passwall | awk '{print $3}' > "$PSVERSION_FILE"
 installed_version=$(cat "$PSVERSION_FILE" 2>/dev/null)
+echo_blue "最新本地版本号：$installed_version"
 
-# Check if the version is already up to date
-if [ "$installed_version" = "$version" ]; then
+# 检查版本是否已经是最新的，比较时使用 version2410 变量
+if [ "$installed_version" = "$version2410" ]; then
   echo_red "已经是最新版本，还更新个鸡毛啊！"
   exit 0
 fi
 
-# If versions do not match, prompt user for confirmation with a 10-second countdown
-echo_orange "你即将更新passwall为最新版本：$version，确定更新吗？(y/n,回车默认y，10秒后自动执行y)"
+# 如果版本不一致，提示用户确认（10秒倒计时，默认 y）
+echo_orange "你即将更新 passwall 为最新版本：$version2410，确定更新吗？(y/n, 回车默认y，10秒后自动执行y)"
 read -t 10 -r confirmation
 confirmation=${confirmation:-y}
 
@@ -473,31 +486,36 @@ if [ "$confirmation" != "y" ]; then
   exit 0
 fi
 
-# If user confirms, continue with the update
+# 用户确认后继续更新
 echo_blue "新版本可用，开始更新..."
 
-# Download files to the temporary directory
-wget -O "$TEMP_DIR/luci-23.05_luci-app-passwall_${version}_all.ipk" "$luci_app_passwall_url"
-wget -O "$TEMP_DIR/luci-23.05_luci-i18n-passwall-zh-cn_${version}_all.ipk" "$luci_i18n_passwall_url"
+# 下载文件到临时目录（保持原文件名）
+wget -O "$TEMP_DIR/$app_file" "$luci_app_passwall_url"
+wget -O "$TEMP_DIR/$i18n_file" "$luci_i18n_passwall_url"
 sleep 5
 echo "下载完成:"
-echo "$TEMP_DIR/luci-23.05_luci-app-passwall_${version}_all.ipk"
-echo "$TEMP_DIR/luci-23.05_luci-i18n-passwall-zh-cn_${version}_all.ipk"
+echo "$TEMP_DIR/$app_file"
+echo "$TEMP_DIR/$i18n_file"
 
-# Install the downloaded IPK files
-opkg install "$TEMP_DIR/luci-23.05_luci-app-passwall_${version}_all.ipk"
-opkg install "$TEMP_DIR/luci-23.05_luci-i18n-passwall-zh-cn_${version}_all.ipk"
+# 安装下载的 IPK 包
+sleep 1
+/etc/init.d/passwall stop
+opkg install "$TEMP_DIR/$app_file" --force-overwrite
+opkg install "$TEMP_DIR/$i18n_file" --force-overwrite
 
-# Restart the passwall service
+# 重启 passwall 服务
 /etc/init.d/passwall restart
 
-# Update the version file with the new version
-echo "$version" > "$PSVERSION_FILE"
+# 将新版本号（version2410）写入 psversion 文件
+echo "$version2410" > "$PSVERSION_FILE"
 
-echo_blue "插件已安装并且passwall服务已重启。"
+echo_blue "插件已安装并且 passwall 服务已重启。"
 
-# Clean up
-rm -rf $TEMP_DIR
+# 清理临时目录
+rm -rf "$TEMP_DIR"
 
 exit 0
+
+
 EOF
+
