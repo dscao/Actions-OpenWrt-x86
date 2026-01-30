@@ -16,7 +16,7 @@ sed -i "/helloworld/d" "feeds.conf.default"
 echo "src-git helloworld https://github.com/fw876/helloworld.git" >> "feeds.conf.default"
 #
 # Add passwall
-echo "src-git passwall https://github.com/xiaorouji/openwrt-passwall.git;main" >> "feeds.conf.default"
+echo "src-git passwall https://github.com/Openwrt-Passwall/openwrt-passwall.git;main" >> "feeds.conf.default"
 #
 mkdir -p files/usr/share
 mkdir -p files/etc/
@@ -392,130 +392,192 @@ EOF
 
 cat>files/usr/share/dscao-pw.sh<<-\EOF
 #!/bin/sh
-# Define variables
-TEMP_DIR="/tmp/test"
+set -u
+set -o pipefail
+
+TEMP_DIR="/tmp/passwall_update"
+RULE_DIR="/usr/share/passwall/rules"
+RULE_BACKUP="/tmp/passwall_rule_backup"
 PSVERSION_FILE="/usr/share/psversion"
 UNZIP_URL="https://downloads.openwrt.org/releases/packages-23.05/x86_64/packages/unzip_6.0-8_x86_64.ipk"
-UNZIP_PACKAGE="unzip_6.0-8_x86_64.ipk"
-RED='\033[0;31m'    # Red color
-BLUE='\033[0;34m'   # Blue color
-ORANGE='\033[0;33m' # Orange color
-NC='\033[0m'        # No Color (reset)
+UNZIP_PACKAGE="/tmp/unzip_6.0-8_x86_64.ipk"
 
-# Echo message in red color
-echo_red() {
-  echo -e "${RED}$1${NC}"
-}
+RED='\033[0;31m'; BLUE='\033[0;34m'; ORANGE='\033[0;33m'; NC='\033[0m'
+echo_red(){ echo -e "${RED}$1${NC}"; }
+echo_blue(){ echo -e "${BLUE}$1${NC}"; }
+echo_orange(){ echo -e "${ORANGE}$1${NC}"; }
 
-# Echo message in blue color
-echo_blue() {
-  echo -e "${BLUE}$1${NC}"
-}
-
-# Echo message in orange color
-echo_orange() {
-  echo -e "${ORANGE}$1${NC}"
-}
-
-# Preparing for update (blue message)
+echo_blue "== Passwall 更新脚本 =="
 echo_blue "正在做更新前的准备工作..."
-# 检查 unzip 是否已安装
-if opkg list-installed | grep -q unzip; then
-    echo "unzip 已经安装，跳过安装步骤。"
-else
-    # 下载 unzip 包
-    echo "开始下载 unzip 包..."
-    wget -q --show-progress "$UNZIP_URL" -O "$UNZIP_PACKAGE"
 
-    # 检查下载是否成功
+########################################
+# 0. 检查并安装 unzip（如果需要）
+########################################
+if opkg list-installed | awk '{print $1}' | grep -qx "unzip"; then
+  echo_blue "unzip 已经安装，跳过安装步骤。"
+else
+  echo_orange "检测到系统未安装 unzip，开始下载..."
+  wget -q --show-progress "$UNZIP_URL" -O "$UNZIP_PACKAGE"
+  
+  if [ $? -eq 0 ]; then
+    echo_blue "下载成功，开始安装 unzip 包..."
+    opkg install "$UNZIP_PACKAGE"
+    
     if [ $? -eq 0 ]; then
-        echo "下载成功，开始安装 unzip 包..."
-        opkg install "$UNZIP_PACKAGE"
-        
-        # 检查安装是否成功
-        if [ $? -eq 0 ]; then
-            echo "unzip 安装成功！"
-        else
-            echo "unzip 安装失败！"
-        fi
+      echo_blue "unzip 安装成功！"
+      rm -f "$UNZIP_PACKAGE"
     else
-        echo "unzip 下载失败！"
+      echo_red "unzip 安装失败！"
+      rm -f "$UNZIP_PACKAGE"
+      exit 1
     fi
+  else
+    echo_red "unzip 下载失败！"
+    exit 1
+  fi
 fi
 
-# Create temporary directory
-mkdir -p "$TEMP_DIR"
+########################################
+# 1. 记录已安装的后端
+########################################
+echo_blue "正在检测已安装的后端组件..."
+BACKENDS="sing-box xray-core v2ray-plugin haproxy ipt2socks geoview"
+SAVED_BACKENDS=""
+for p in $BACKENDS; do
+  if opkg list-installed | awk '{print $1}' | grep -qx "$p"; then
+    SAVED_BACKENDS="$SAVED_BACKENDS $p"
+  fi
+done
 
-# Get the latest release information from GitHub
-latest_release=$(curl -s https://api.github.com/repos/xiaorouji/openwrt-passwall/releases/latest)
+########################################
+# 2. 获取 GitHub 最新 release
+########################################
+echo_blue "正在获取最新版本信息..."
+fetch_latest_json() {
+  command -v curl >/dev/null 2>&1 && curl -s https://api.github.com/repos/xiaorouji/openwrt-passwall/releases/latest \
+    || wget -qO- https://api.github.com/repos/xiaorouji/openwrt-passwall/releases/latest
+}
+latest_release="$(fetch_latest_json)"
 
-# Extract version number from GitHub release (例如 "25.3.9-1")
-version=$(echo "$latest_release" | grep '"tag_name":' | sed -E 's/.*"tag_name": "([^"]+)".*/\1/')
+luci_app_passwall_url=$(echo "$latest_release" \
+  | grep -o '"browser_download_url": "[^"]*luci-app-passwall_[^"]*all\.ipk"' \
+  | sed -E 's/.*"browser_download_url": "([^"]+)".*/\1/')
+luci_i18n_passwall_url=$(echo "$latest_release" \
+  | grep -o '"browser_download_url": "[^"]*luci-i18n-passwall-zh-cn_[^"]*all\.ipk"' \
+  | sed -E 's/.*"browser_download_url": "([^"]+)".*/\1/')
 
-
-# Extract download URLs
-luci_app_passwall_url=$(echo "$latest_release" | grep -o '"browser_download_url": "[^"]*luci-24.10_luci-app-passwall_[^"]*"' | sed -E 's/.*"browser_download_url": "([^"]+)".*/\1/')
-luci_i18n_passwall_url=$(echo "$latest_release" | grep -o '"browser_download_url": "[^"]*luci-24.10_luci-i18n-passwall-zh-cn_[^"]*"' | sed -E 's/.*"browser_download_url": "([^"]+)".*/\1/')
-
-# 获取文件名（例如 luci-24.10_luci-app-passwall_25.3.9-r1_all.ipk）
 app_file=$(basename "$luci_app_passwall_url")
 i18n_file=$(basename "$luci_i18n_passwall_url")
+version_new=$(echo "$app_file" | sed -E 's/^luci-app-passwall_([^_]+)_all\.ipk$/\1/')
 
-# 从 app_file 中提取版本号部分，即 "25.3.9-r1"
-version2410=$(echo "$app_file" | sed -E 's/^luci-24\.10_luci-app-passwall_([^_]+)_all\.ipk$/\1/')
-echo_blue "最新云端版本号：$version2410"
+[ -z "$version_new" ] && echo_red "未找到 Passwall 主程序，退出。" && exit 1
 
-# 将当前安装的版本写入 psversion 文件
-opkg list-installed | grep luci-app-passwall | awk '{print $3}' > "$PSVERSION_FILE"
-installed_version=$(cat "$PSVERSION_FILE" 2>/dev/null)
-echo_blue "最新本地版本号：$installed_version"
+echo_blue "最新版本：$version_new"
 
-# 检查版本是否已经是最新的，比较时使用 version2410 变量
-if [ "$installed_version" = "$version2410" ]; then
-  echo_red "已经是最新版本，还更新个鸡毛啊！"
+########################################
+# 3. 本地版本检查
+########################################
+installed_version="$(opkg list-installed | grep '^luci-app-passwall ' | awk '{print $3}')"
+installed_version="${installed_version:-无}"
+
+echo_blue "当前本地版本：$installed_version"
+
+if [ "$installed_version" = "$version_new" ]; then
+  echo_blue "已经是最新版本，无需更新。"
   exit 0
 fi
 
-# 如果版本不一致，提示用户确认（10秒倒计时，默认 y）
-echo_orange "你即将更新 passwall 为最新版本：$version2410，确定更新吗？(y/n, 回车默认y，10秒后自动执行y)"
-read -t 10 -r confirmation
-confirmation=${confirmation:-y}
+########################################
+# 4. 用户确认
+########################################
+echo_orange "即将更新到版本 $version_new，继续？(y/n, 默认 y)"
+read -t 10 -r reply || true
+reply=${reply:-y}
+[ "$reply" = "y" ] || exit 0
 
-if [ "$confirmation" != "y" ]; then
-  echo_blue "已取消更新。"
-  exit 0
-fi
+########################################
+# 5. 下载新版本
+########################################
+mkdir -p "$TEMP_DIR"
+echo_blue "开始下载新版本..."
 
-# 用户确认后继续更新
-echo_blue "新版本可用，开始更新..."
+wget -O "$TEMP_DIR/$app_file" "$luci_app_passwall_url" || { echo_red "主程序下载失败"; exit 1; }
+wget -O "$TEMP_DIR/$i18n_file" "$luci_i18n_passwall_url" || { echo_red "中文包下载失败"; exit 1; }
 
-# 下载文件到临时目录（保持原文件名）
-wget -O "$TEMP_DIR/$app_file" "$luci_app_passwall_url"
-wget -O "$TEMP_DIR/$i18n_file" "$luci_i18n_passwall_url"
-sleep 5
-echo "下载完成:"
-echo "$TEMP_DIR/$app_file"
-echo "$TEMP_DIR/$i18n_file"
+########################################
+# 6. 备份自定义规则
+########################################
+echo_blue "备份你的自定义规则..."
 
-# 安装下载的 IPK 包
+mkdir -p "$RULE_BACKUP"
+for f in direct_host direct_ip proxy_host; do
+  [ -f "$RULE_DIR/$f" ] && cp "$RULE_DIR/$f" "$RULE_BACKUP/$f" 2>/dev/null || true
+done
+
+########################################
+# 7. 停止 Passwall
+########################################
+echo_blue "正在停止 Passwall 服务..."
+[ -x /etc/init.d/passwall ] && /etc/init.d/passwall stop || true
 sleep 1
-/etc/init.d/passwall stop
-opkg install "$TEMP_DIR/$app_file" --force-overwrite
-opkg install "$TEMP_DIR/$i18n_file" --force-overwrite
 
-# 重启 passwall 服务
-/etc/init.d/passwall restart
+########################################
+# 8. 清理 nft 表（修复升级报错）
+########################################
+echo_blue "清理 Passwall 旧 nftset..."
 
-# 将新版本号（version2410）写入 psversion 文件
-echo "$version2410" > "$PSVERSION_FILE"
+nft flush ruleset 2>/dev/null || true
+for table in passwall passwall_chn passwall_geo passwall1; do
+  nft delete table inet "$table" 2>/dev/null || true
+done
 
-echo_blue "插件已安装并且 passwall 服务已重启。"
+########################################
+# 9. 安装 Passwall（保留自定义配置）
+########################################
+echo_blue "安装新版本（保留你的自定义配置）..."
 
-# 清理临时目录
-rm -rf "$TEMP_DIR"
+# 使用 --force-overwrite 和 --force-reinstall，但不使用 --force-maintainer
+# 这样会保留用户修改的配置文件
+opkg install "$TEMP_DIR/$app_file" --force-overwrite --force-reinstall 2>&1 | grep -v "Not deleting modified conffile" || true
+opkg install "$TEMP_DIR/$i18n_file" --force-overwrite --force-reinstall 2>&1 | grep -v "Not deleting modified conffile" || true
 
+########################################
+# 10. 恢复你的自定义规则
+########################################
+echo_blue "恢复你的自定义规则..."
+
+for f in direct_host direct_ip proxy_host; do
+  [ -f "$RULE_BACKUP/$f" ] && cp "$RULE_BACKUP/$f" "$RULE_DIR/$f" 2>/dev/null || true
+done
+
+########################################
+# 11. 恢复后端组件
+########################################
+echo_blue "恢复后端组件..."
+
+for p in $SAVED_BACKENDS; do
+  if ! opkg list-installed | awk '{print $1}' | grep -qx "$p"; then
+    echo_orange "重新安装后端：$p"
+    opkg install "$p" --force-overwrite
+  fi
+done
+
+########################################
+# 12. 初始化 nft 环境（避免 netlink 报错）
+########################################
+echo_blue "初始化 nft 环境..."
+sleep 1
+nft flush ruleset 2>/dev/null || true
+
+########################################
+# 13. 重启 Passwall
+########################################
+echo_blue "重启 Passwall..."
+/etc/init.d/passwall restart || true
+
+echo "$version_new" > "$PSVERSION_FILE"
+echo_blue "=== Passwall 更新完成（安静模式，无提示）=== "
+
+rm -rf "$TEMP_DIR" "$RULE_BACKUP"
 exit 0
-
-
 EOF
-
