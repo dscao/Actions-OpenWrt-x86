@@ -45,7 +45,7 @@ jobs:
         echo "SHA_04=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
         cd
 
-        git clone https://github.com/xiaorouji/openwrt-passwall --filter=blob:none
+        git clone https://github.com/Openwrt-Passwall/openwrt-passwall --filter=blob:none
         cd openwrt-passwall
         echo "SHA_05=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
         cd
